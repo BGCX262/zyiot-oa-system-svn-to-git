@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Model>
+  <DataType name="BaseType" meta="child:ZY_CLASS1,ZY_EXP_INFO">
+    <PropertyDef name="memo">
+      <Property name="label">备注</Property>
+      <Property name="dataType">String</Property>
+    </PropertyDef>
+    <PropertyDef name="create_user">
+      <Property name="label">创建人</Property>
+      <Property name="dataType">String</Property>
+      <Property name="mapping">
+        <Property name="keyProperty">username</Property>
+        <Property name="valueProperty">cname</Property>
+        <Property name="mapValues">${dorado.getDataProvider(&quot;zyDefaultUserPR#getAllUser&quot;).getResult()}</Property>
+      </Property>
+    </PropertyDef>
+    <PropertyDef name="create_date">
+      <Property name="label">创建时间</Property>
+      <Property name="dataType">Date</Property>
+      <Property name="displayFormat">Y-m-d H:i:s</Property>
+    </PropertyDef>
+    <PropertyDef name="last_update_user">
+      <Property name="label">修改人</Property>
+      <Property name="dataType">String</Property>
+      <Property name="mapping">
+        <Property name="mapValues">${dorado.getDataProvider(&quot;zyDefaultUserPR#getAllUser&quot;).getResult()}</Property>
+        <Property name="keyProperty">username</Property>
+        <Property name="valueProperty">cname</Property>
+      </Property>
+    </PropertyDef>
+    <PropertyDef name="last_update_date">
+      <Property name="label">修改时间</Property>
+      <Property name="dataType">Date</Property>
+      <Property name="displayFormat">Y-m-d H:i:s</Property>
+    </PropertyDef>
+  </DataType>
+  <DataType name="ZY_CLASS1" parent="BaseType">
+    <Property name="matchType">com.zyiot.pm.entity.comm.ZyClass1</Property>
+    <PropertyDef name="pkid">
+      <Property name="dataType">String</Property>
+    </PropertyDef>
+    <PropertyDef name="classcode1">
+      <Property name="dataType">String</Property>
+      <Property name="label">行业分类编码</Property>
+      <Property name="required">true</Property>
+    </PropertyDef>
+    <PropertyDef name="classname1">
+      <Property name="dataType">String</Property>
+      <Property name="label">行业分类名称</Property>
+      <Property name="required">true</Property>
+    </PropertyDef>
+  </DataType>
+  <DataType name="ZY_AUTO_NUMBER">
+    <Property name="creationType">com.zyiot.pm.entity.comm.ZyAutoNumber</Property>
+    <PropertyDef name="pkid">
+      <Property name="dataType">String</Property>
+    </PropertyDef>
+    <PropertyDef name="tablename">
+      <Property name="dataType">String</Property>
+    </PropertyDef>
+    <PropertyDef name="maxnumber">
+      <Property name="dataType">String</Property>
+    </PropertyDef>
+  </DataType>
+  <DataType name="ZY_EXP_INFO" parent="BaseType">
+    <Property name="creationType">com.zyiot.pm.entity.ht.ZyExpinfo</Property>
+    <PropertyDef name="pkid">
+      <Property name="dataType">String</Property>
+    </PropertyDef>
+    <PropertyDef name="expcode">
+      <Property name="dataType">String</Property>
+      <Property name="label">拓展商编号</Property>
+      <Property name="required">true</Property>
+    </PropertyDef>
+    <PropertyDef name="expjoindate">
+      <Property name="dataType">Date</Property>
+      <Property name="label">加盟日期</Property>
+      <Property name="displayFormat">Y-m-d</Property>
+    </PropertyDef>
+    <PropertyDef name="expname">
+      <Property name="dataType">String</Property>
+      <Property name="label">单位/姓名</Property>
+      <Property name="required">true</Property>
+    </PropertyDef>
+    <PropertyDef name="exprate">
+      <Property name="dataType">float</Property>
+      <Property name="label">费率</Property>
+      <Property name="required">true</Property>
+      <Property name="displayFormat">#0.00%</Property>
+    </PropertyDef>
+    <PropertyDef name="expphone">
+      <Property name="dataType">String</Property>
+      <Property name="label">电话</Property>
+      <Property name="required">true</Property>
+    </PropertyDef>
+    <PropertyDef name="exptechcost">
+      <Property name="dataType">float</Property>
+      <Property name="label">技术服务费</Property>
+      <Property name="displayFormat">￥#,##0.00</Property>
+    </PropertyDef>
+    <PropertyDef name="exphardcost">
+      <Property name="dataType">float</Property>
+      <Property name="label">硬件费</Property>
+      <Property name="displayFormat">￥#,##0.00</Property>
+    </PropertyDef>
+    <PropertyDef name="expbankname">
+      <Property name="dataType">String</Property>
+      <Property name="label">开户银行</Property>
+      <Property name="required">true</Property>
+    </PropertyDef>
+    <PropertyDef name="expaccontname">
+      <Property name="dataType">String</Property>
+      <Property name="label">银行户名</Property>
+      <Property name="required">true</Property>
+    </PropertyDef>
+    <PropertyDef name="expaccontno">
+      <Property name="dataType">String</Property>
+      <Property name="label">银行帐号</Property>
+      <Property name="required">true</Property>
+    </PropertyDef>
+    <PropertyDef name="expid">
+      <Property name="dataType">String</Property>
+      <Property name="label">身份证</Property>
+      <Property name="required">true</Property>
+    </PropertyDef>
+    <PropertyDef name="expaddr">
+      <Property name="dataType">String</Property>
+      <Property name="label">住址</Property>
+      <Property name="required">true</Property>
+    </PropertyDef>
+    <PropertyDef name="expemail">
+      <Property name="dataType">String</Property>
+      <Property name="label">邮箱</Property>
+    </PropertyDef>
+    <PropertyDef name="make_user">
+      <Property name="dataType">String</Property>
+      <Property name="label">公司介绍人</Property>
+      <Property name="mapping">
+        <Property name="mapValues">${dorado.getDataProvider(&quot;zyDefaultUserPR#getAllUser&quot;).getResult()}</Property>
+        <Property name="keyProperty">username</Property>
+        <Property name="valueProperty">cname</Property>
+      </Property>
+    </PropertyDef>
+  </DataType>
+</Model>

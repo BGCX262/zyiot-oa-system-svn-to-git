@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewConfig>
+  <Arguments/>
+  <Context/>
+  <Model>
+    <DataType name="ZY_EXP_INFO" parent="global:ZY_EXP_INFO">
+      <Reference name="zyclass1">
+        <Property name="dataType">[ZY_CLASS1]</Property>
+      </Reference>
+    </DataType>
+    <DataType name="DT_CONDITION">
+      <PropertyDef name="expcode">
+        <Property name="dataType">String</Property>
+        <Property name="label">拓展商编号</Property>
+      </PropertyDef>
+    </DataType>
+  </Model>
+  <View>
+    <DataSet id="DS_ZY_EXP_INFO">
+      <ClientEvent name="onReady">this.id(&quot;ACT_LOAD&quot;).execute();</ClientEvent>
+      <Property name="dataType">[ZY_EXP_INFO]</Property>
+      <Property name="dataProvider">zyExpinfoPR#getAll</Property>
+      <Property name="loadMode">manual</Property>
+      <Property name="pageSize">30</Property>
+    </DataSet>
+    <DataSet id="DS_CONDITION">
+      <Property name="dataType">[DT_CONDITION]</Property>
+    </DataSet>
+    <ToolBar>
+      <DataPilot>
+        <ClientEvent name="onSubControlAction">var code = arg.code;&#xD;
+var entity = this.get(&quot;#DS_ZY_EXP_INFO&quot;).getData(&quot;#&quot;);&#xD;
+var updateAction = this.get(&quot;#updateActionSave&quot;);&#xD;
+switch (code) {&#xD;
+	&#xD;
+	case &quot;+&quot;:&#xD;
+		arg.processDefault = false;&#xD;
+		updateAction.set(&quot;userData&quot;,&quot;insert&quot;);&#xD;
+	 	this.get(&quot;#DLG_FORM&quot;).set(&quot;userData&quot;,&quot;insert&quot;).show();&#xD;
+	break;&#xD;
+	case &quot;-&quot;:&#xD;
+		arg.processDefault = false;&#xD;
+		&#xD;
+		dorado.MessageBox.confirm(&quot;是否删除数据？&quot;,function(){&#xD;
+				entity.remove();&#xD;
+				updateAction.set(&quot;userData&quot;,&quot;delete&quot;);&#xD;
+				updateAction.execute();&#xD;
+			});&#xD;
+			&#xD;
+	break;&#xD;
+	&#xD;
+}</ClientEvent>
+        <Property name="dataSet">DS_ZY_EXP_INFO</Property>
+        <Property name="itemCodes">pages,+,-</Property>
+      </DataPilot>
+      <ToolBarButton id="TBTN_UPDATE">
+        <ClientEvent name="onClick">var entity = this.get(&quot;#DS_ZY_EXP_INFO&quot;).getData(&quot;#&quot;);&#xD;
+if (entity){&#xD;
+	this.get(&quot;#DLG_FORM&quot;).set(&quot;userData&quot;,&quot;edit&quot;).show();&#xD;
+	this.get(&quot;#updateActionSave&quot;).set(&quot;userData&quot;,&quot;edit&quot;);&#xD;
+}</ClientEvent>
+        <Property name="caption">编辑...</Property>
+        <Property name="icon"> url(>skin>common/icons.gif) -200px -0px</Property>
+      </ToolBarButton>
+      <ToolBarButton id="TBTN_QUERY">
+        <Property name="caption">查询</Property>
+        <Property name="action">ACT_LOAD</Property>
+        <Property name="icon">url(>skin>common/icons.gif) -20px -40px</Property>
+      </ToolBarButton>
+    </ToolBar>
+    <DataGrid>
+      <Property name="dataSet">DS_ZY_EXP_INFO</Property>
+      <Property name="readOnly">true</Property>
+      <Property name="scrollMode">lazyRender</Property>
+      <Property name="fixedColumnCount">3</Property>
+      <RowNumColumn/>
+      <DataColumn name="expcode">
+        <Property name="property">expcode</Property>
+        <Property name="width">100</Property>
+      </DataColumn>
+      <DataColumn name="expname">
+        <Property name="property">expname</Property>
+      </DataColumn>
+      <DataColumn name="expid">
+        <Property name="property">expid</Property>
+      </DataColumn>
+      <DataColumn name="expphone">
+        <Property name="property">expphone</Property>
+      </DataColumn>
+      <DataColumn name="expjoindate">
+        <Property name="property">expjoindate</Property>
+      </DataColumn>
+      <DataColumn name="exprate">
+        <Property name="property">exprate</Property>
+      </DataColumn>
+      <DataColumn name="exptechcost">
+        <Property name="property">exptechcost</Property>
+      </DataColumn>
+      <DataColumn name="exphardcost">
+        <Property name="property">exphardcost</Property>
+      </DataColumn>
+      <DataColumn name="expaddr">
+        <Property name="property">expaddr</Property>
+      </DataColumn>
+      <DataColumn name="expemail">
+        <Property name="property">expemail</Property>
+      </DataColumn>
+      <DataColumn name="memo">
+        <Property name="property">memo</Property>
+      </DataColumn>
+      <DataColumn name="make_user">
+        <Property name="property">make_user</Property>
+      </DataColumn>
+      <DataColumn name="expaccontname">
+        <Property name="property">expaccontname</Property>
+      </DataColumn>
+      <DataColumn name="expbankname">
+        <Property name="property">expbankname</Property>
+      </DataColumn>
+      <DataColumn name="expaccontno">
+        <Property name="property">expaccontno</Property>
+      </DataColumn>
+      <DataColumn name="create_user">
+        <Property name="property">create_user</Property>
+      </DataColumn>
+      <DataColumn name="create_date">
+        <Property name="property">create_date</Property>
+      </DataColumn>
+      <DataColumn name="last_update_user">
+        <Property name="property">last_update_user</Property>
+      </DataColumn>
+      <DataColumn name="last_update_date">
+        <Property name="property">last_update_date</Property>
+      </DataColumn>
+    </DataGrid>
+    <Dialog id="DLG_FORM">
+      <ClientEvent name="onClose">view.get(&quot;#DS_ZY_EXP_INFO&quot;).getData(&quot;#&quot;).cancel();</ClientEvent>
+      <ClientEvent name="onShow">var type = self.get(&quot;userData&quot;);&#xD;
+if (type == &quot;insert&quot;) {&#xD;
+	&#xD;
+	var getcode =view.get(&quot;#ajaxGetCode&quot;);&#xD;
+	getcode.execute();&#xD;
+	max_code=getcode.get(&quot;returnValue&quot;);&#xD;
+	window.code=&quot;T&quot;+max_code+&quot;&quot;;&#xD;
+    this.get(&quot;#DS_ZY_EXP_INFO&quot;).getData().insert(&#xD;
+		{&#xD;
+			expcode:code&#xD;
+		}&#xD;
+	);&#xD;
+    }</ClientEvent>
+      <Property name="caption">拓展商信息</Property>
+      <Property name="contentOverflow">auto</Property>
+      <Property name="height">600</Property>
+      <Property name="icon">url(>skin>common/icons.gif) -160px -40px</Property>
+      <Property name="width">800</Property>
+      <Property name="modal">false</Property>
+      <Buttons>
+        <Button id="BTN_OK">
+          <Property name="action">updateActionSave</Property>
+          <Property name="caption">确定</Property>
+          <Property name="icon"> url(>skin>common/icons.gif) -20px -0px</Property>
+        </Button>
+        <Button id="BTN_CANCEL">
+          <ClientEvent name="onClick">this.get(&quot;#DLG_FORM&quot;).close();&#xD;
+</ClientEvent>
+          <Property name="caption">取消</Property>
+          <Property name="icon">url(>skin>common/icons.gif) -220px -240px</Property>
+        </Button>
+      </Buttons>
+      <Children>
+        <Container>
+          <Property name="contentOverflow">auto</Property>
+          <GroupBox>
+            <Property name="caption">基本信息</Property>
+            <Buttons/>
+            <Children>
+              <AutoForm>
+                <Property name="dataSet">DS_ZY_EXP_INFO</Property>
+                <Property name="dataType">ZY_EXP_INFO</Property>
+                <Property name="cols">*,*,*</Property>
+                <AutoFormElement>
+                  <Property name="name">expcode</Property>
+                  <Property name="property">expcode</Property>
+                  <Property name="readOnly">true</Property>
+                  <Editor/>
+                </AutoFormElement>
+                <AutoFormElement>
+                  <Property name="name">expname</Property>
+                  <Property name="property">expname</Property>
+                  <Editor/>
+                </AutoFormElement>
+                <AutoFormElement>
+                  <Property name="name">expphone</Property>
+                  <Property name="property">expphone</Property>
+                  <Editor/>
+                </AutoFormElement>
+                <AutoFormElement layoutConstraint="colSpan:2">
+                  <Property name="name">expid</Property>
+                  <Property name="property">expid</Property>
+                  <Editor/>
+                </AutoFormElement>
+                <AutoFormElement>
+                  <Property name="name">make_user</Property>
+                  <Property name="property">make_user</Property>
+                  <Editor/>
+                </AutoFormElement>
+                <AutoFormElement layoutConstraint="colSpan:2">
+                  <Property name="name">expemail</Property>
+                  <Property name="property">expemail</Property>
+                  <Editor/>
+                </AutoFormElement>
+                <AutoFormElement>
+                  <Property name="name">expjoindate</Property>
+                  <Property name="property">expjoindate</Property>
+                  <Editor/>
+                </AutoFormElement>
+                <AutoFormElement>
+                  <Property name="name">exprate</Property>
+                  <Property name="property">exprate</Property>
+                  <Editor/>
+                </AutoFormElement>
+                <AutoFormElement>
+                  <Property name="name">exptechcost</Property>
+                  <Property name="property">exptechcost</Property>
+                  <Editor/>
+                </AutoFormElement>
+                <AutoFormElement>
+                  <Property name="name">exphardcost</Property>
+                  <Property name="property">exphardcost</Property>
+                  <Editor/>
+                </AutoFormElement>
+                <AutoFormElement layoutConstraint="colSpan:3;rowSpan:1">
+                  <Property name="name">expaddr</Property>
+                  <Property name="property">expaddr</Property>
+                  <Editor/>
+                </AutoFormElement>
+                <AutoFormElement layoutConstraint="colSpan:3;rowSpan:3">
+                  <Property name="name">memo</Property>
+                  <Property name="property">memo</Property>
+                  <Editor>
+                    <TextArea layoutConstraint="colSpan:2;rowSpan:3"/>
+                  </Editor>
+                </AutoFormElement>
+              </AutoForm>
+            </Children>
+          </GroupBox>
+          <GroupBox>
+            <Property name="caption">银行信息</Property>
+            <Buttons/>
+            <Children>
+              <AutoForm>
+                <Property name="dataSet">DS_ZY_EXP_INFO</Property>
+                <Property name="dataType">ZY_EXP_INFO</Property>
+                <Property name="cols">*,*</Property>
+                <Property name="readOnly">false</Property>
+                <AutoFormElement>
+                  <Property name="name">expbankname</Property>
+                  <Property name="property">expbankname</Property>
+                  <Editor/>
+                </AutoFormElement>
+                <AutoFormElement>
+                  <Property name="name">expaccontno</Property>
+                  <Property name="property">expaccontno</Property>
+                  <Editor/>
+                </AutoFormElement>
+                <AutoFormElement>
+                  <Property name="name">expaccontname</Property>
+                  <Property name="property">expaccontname</Property>
+                  <Editor/>
+                </AutoFormElement>
+              </AutoForm>
+            </Children>
+          </GroupBox>
+          <GroupBox>
+            <Property name="caption">维护管理</Property>
+            <Buttons/>
+            <Children>
+              <AutoForm>
+                <Property name="dataSet">DS_ZY_EXP_INFO</Property>
+                <Property name="dataType">ZY_EXP_INFO</Property>
+                <Property name="cols">*,*</Property>
+                <Property name="readOnly">false</Property>
+                <AutoFormElement>
+                  <Property name="name">create_user</Property>
+                  <Property name="property">create_user</Property>
+                  <Property name="readOnly">true</Property>
+                  <Editor/>
+                </AutoFormElement>
+                <AutoFormElement>
+                  <Property name="name">create_date</Property>
+                  <Property name="property">create_date</Property>
+                  <Property name="readOnly">true</Property>
+                  <Editor/>
+                </AutoFormElement>
+                <AutoFormElement>
+                  <Property name="name">last_update_user</Property>
+                  <Property name="property">last_update_user</Property>
+                  <Property name="readOnly">true</Property>
+                  <Editor/>
+                </AutoFormElement>
+                <AutoFormElement>
+                  <Property name="name">last_update_date</Property>
+                  <Property name="property">last_update_date</Property>
+                  <Property name="readOnly">true</Property>
+                  <Editor/>
+                </AutoFormElement>
+              </AutoForm>
+            </Children>
+          </GroupBox>
+        </Container>
+      </Children>
+      <Tools/>
+    </Dialog>
+    <UpdateAction id="updateActionSave">
+      <ClientEvent name="onSuccess">this.get(&quot;#DLG_FORM&quot;).close();&#xD;
+self.set(&quot;userData&quot;,&quot;&quot;);&#xD;
+//this.get(&quot;#DS_ZY_CLASS&quot;).flushAsync();&#xD;
+</ClientEvent>
+      <ClientEvent name="beforeExecute">var type = self.get(&quot;userData&quot;);&#xD;
+if (type == &quot;insert&quot;) {&#xD;
+	//数据保存前，再获取次编码，以防止并发操作，编码重码&#xD;
+	var getcode =view.get(&quot;#ajaxGetCode&quot;);&#xD;
+	getcode.execute();&#xD;
+	var max_code=getcode.get(&quot;returnValue&quot;);&#xD;
+	var codenew=&quot;T&quot;+max_code+&quot;&quot;;&#xD;
+	//code ：第一次获取的编码&#xD;
+	if(codenew!=code)&#xD;
+	{&#xD;
+		this.set(&quot;#DS_ZY_EXP_INFO.data:#.expcode&quot;,codenew);&#xD;
+	}&#xD;
+}</ClientEvent>
+      <Property name="dataResolver">zyExpinfoPR#saveZyExpinfo</Property>
+      <Property name="successMessage">保存成功</Property>
+      <UpdateItem>
+        <Property name="dataSet">DS_ZY_EXP_INFO</Property>
+        <Property name="dataPath">[#dirty]</Property>
+        <Property name="submitOldData">true</Property>
+      </UpdateItem>
+    </UpdateAction>
+    <Action id="ACT_LOAD">
+      <ClientEvent name="beforeExecute">if (this.pageSize!=null&amp;&amp;this.pageSize!=&quot;&quot;){&#xD;
+	this.id(&quot;DS_ZY_EXP_INFO&quot;).set(&quot;pageSize&quot;,this.pageSize);	&#xD;
+}</ClientEvent>
+      <ClientEvent name="onExecute">this.get(&quot;#DS_ZY_EXP_INFO&quot;).set(&quot;parameter&quot;, {&#xD;
+        condition:this.get(&quot;#DS_CONDITION&quot;).getData(&quot;#&quot;)&#xD;
+    });&#xD;
+this.get(&quot;#DS_CONDITION&quot;).setData({}); &#xD;
+this.get(&quot;#DS_ZY_EXP_INFO&quot;).flushAsync();&#xD;
+&#xD;
+</ClientEvent>
+    </Action>
+    <AjaxAction id="ajaxGetCode">
+      <Property name="service">zyExpinfoPR#generate_code</Property>
+      <Property name="async">false</Property>
+    </AjaxAction>
+  </View>
+</ViewConfig>

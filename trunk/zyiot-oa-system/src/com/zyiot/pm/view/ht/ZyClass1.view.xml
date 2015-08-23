@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewConfig>
+  <Arguments/>
+  <Context/>
+  <Model>
+    <DataType name="ZY_CLASS1" parent="global:ZY_CLASS1">
+      <PropertyDef name="percent_test">
+        <Property name="label">完成比</Property>
+      </PropertyDef>
+    </DataType>
+    <DataType name="DT_CONDITION">
+      <PropertyDef name="classcode1">
+        <Property name="dataType">String</Property>
+        <Property name="label">行业分类编码</Property>
+      </PropertyDef>
+      <PropertyDef name="classname1">
+        <Property name="dataType">String</Property>
+        <Property name="label">行业分类名称</Property>
+      </PropertyDef>
+    </DataType>
+  </Model>
+  <View>
+    <DataSet id="DS_ZY_CLASS">
+      <ClientEvent name="onReady">this.id(&quot;ACT_LOAD&quot;).execute();</ClientEvent>
+      <Property name="dataType">[ZY_CLASS1]</Property>
+      <Property name="dataProvider">zyClass1PR#getAll</Property>
+      <Property name="loadMode">manual</Property>
+      <Property name="pageSize">30</Property>
+    </DataSet>
+    <DataSet id="DS_CONDITION">
+      <Property name="dataType">[DT_CONDITION]</Property>
+    </DataSet>
+    <AutoForm id="AF_CONDITION">
+      <Property name="dataSet">DS_CONDITION</Property>
+      <AutoFormElement>
+        <Property name="name">classcode1</Property>
+        <Property name="property">classcode1</Property>
+        <Editor/>
+      </AutoFormElement>
+      <AutoFormElement>
+        <Property name="name">classname1</Property>
+        <Property name="property">classname1</Property>
+        <Editor/>
+      </AutoFormElement>
+    </AutoForm>
+    <ToolBar>
+      <DataPilot>
+        <ClientEvent name="onSubControlAction">var code = arg.code;&#xD;
+var entity = this.get(&quot;#DS_ZY_CLASS&quot;).getData(&quot;#&quot;);&#xD;
+var updateAction = this.get(&quot;#updateActionSave&quot;);&#xD;
+switch (code) {&#xD;
+	&#xD;
+	case &quot;+&quot;:&#xD;
+		arg.processDefault = false;&#xD;
+		updateAction.set(&quot;userData&quot;,&quot;insert&quot;);&#xD;
+	 	this.get(&quot;#DLG_FORM&quot;).set(&quot;userData&quot;,&quot;insert&quot;).show();&#xD;
+	break;&#xD;
+	case &quot;-&quot;:&#xD;
+		arg.processDefault = false;&#xD;
+		&#xD;
+		dorado.MessageBox.confirm(&quot;是否删除数据？&quot;,function(){&#xD;
+				entity.remove();&#xD;
+				updateAction.set(&quot;userData&quot;,&quot;delete&quot;);&#xD;
+				updateAction.execute();&#xD;
+			});&#xD;
+			&#xD;
+	break;&#xD;
+	&#xD;
+}</ClientEvent>
+        <Property name="dataSet">DS_ZY_CLASS</Property>
+        <Property name="itemCodes">pages,+,-</Property>
+      </DataPilot>
+      <ToolBarButton id="TBTN_UPDATE">
+        <ClientEvent name="onClick">var entity = this.get(&quot;#DS_ZY_CLASS&quot;).getData(&quot;#&quot;);&#xD;
+if (entity){&#xD;
+	this.get(&quot;#DLG_FORM&quot;).set(&quot;userData&quot;,&quot;edit&quot;).show();&#xD;
+	this.get(&quot;#updateActionSave&quot;).set(&quot;userData&quot;,&quot;edit&quot;);&#xD;
+}</ClientEvent>
+        <Property name="caption">编辑...</Property>
+        <Property name="icon"> url(>skin>common/icons.gif) -200px -0px</Property>
+      </ToolBarButton>
+      <ToolBarButton id="TBTN_QUERY">
+        <Property name="caption">查询</Property>
+        <Property name="action">ACT_LOAD</Property>
+        <Property name="icon">url(>skin>common/icons.gif) -20px -40px</Property>
+      </ToolBarButton>
+    </ToolBar>
+    <DataGrid>
+      <ClientEvent name="onCreate">MyProgressBarCellRenderer = $extend(dorado.widget.grid.ProgressBarCellRenderer,{&#xD;
+        createSubControl: function(arg) {&#xD;
+            return new dorado.widget.ProgressBar({&#xD;
+                maxValue: 1000,&#xD;
+                textPattern: &quot;{percent}%&quot;         &#xD;
+            }); &#xD;
+        }&#xD;
+});&#xD;
+&#xD;
+//self.getColumn(&quot;percent_test&quot;).set(&quot;renderer&quot;, new MyProgressBarCellRenderer());</ClientEvent>
+      <Property name="dataSet">DS_ZY_CLASS</Property>
+      <Property name="readOnly">true</Property>
+      <RowNumColumn/>
+      <DataColumn name="classcode1">
+        <Property name="property">classcode1</Property>
+      </DataColumn>
+      <DataColumn name="classname1">
+        <Property name="property">classname1</Property>
+      </DataColumn>
+      <DataColumn name="memo">
+        <Property name="property">memo</Property>
+      </DataColumn>
+      <DataColumn name="create_user">
+        <Property name="property">create_user</Property>
+      </DataColumn>
+      <DataColumn name="create_date">
+        <Property name="property">create_date</Property>
+      </DataColumn>
+      <DataColumn name="last_update_user">
+        <Property name="property">last_update_user</Property>
+      </DataColumn>
+      <DataColumn name="last_update_date">
+        <Property name="property">last_update_date</Property>
+      </DataColumn>
+    </DataGrid>
+    <Dialog id="DLG_FORM">
+      <ClientEvent name="onClose">view.get(&quot;#DS_ZY_CLASS&quot;).getData(&quot;#&quot;).cancel();</ClientEvent>
+      <ClientEvent name="onShow">var type = self.get(&quot;userData&quot;);&#xD;
+if (type == &quot;insert&quot;) {&#xD;
+	&#xD;
+	var getcode =view.get(&quot;#ajaxGetCode&quot;);&#xD;
+	getcode.execute();&#xD;
+	max_code=getcode.get(&quot;returnValue&quot;);&#xD;
+	window.code=&quot;H&quot;+max_code+&quot;&quot;;&#xD;
+    this.get(&quot;#DS_ZY_CLASS&quot;).getData().insert(&#xD;
+		{&#xD;
+			classcode1:code&#xD;
+		}&#xD;
+	);&#xD;
+    }</ClientEvent>
+      <Property name="caption">行业分类</Property>
+      <Property name="contentOverflow">auto</Property>
+      <Property name="height">500</Property>
+      <Property name="icon">url(>skin>common/icons.gif) -160px -40px</Property>
+      <Property name="width">600</Property>
+      <Buttons>
+        <Button id="BTN_OK">
+          <Property name="action">updateActionSave</Property>
+          <Property name="caption">确定</Property>
+          <Property name="icon"> url(>skin>common/icons.gif) -20px -0px</Property>
+        </Button>
+        <Button id="BTN_CANCEL">
+          <ClientEvent name="onClick">this.get(&quot;#DLG_FORM&quot;).close();&#xD;
+</ClientEvent>
+          <Property name="caption">取消</Property>
+          <Property name="icon">url(>skin>common/icons.gif) -220px -240px</Property>
+        </Button>
+      </Buttons>
+      <Children>
+        <GroupBox>
+          <Property name="caption">基础情况</Property>
+          <Buttons/>
+          <Children>
+            <AutoForm>
+              <Property name="dataSet">DS_ZY_CLASS</Property>
+              <Property name="dataType">ZY_CLASS1</Property>
+              <Property name="cols">*,*</Property>
+              <AutoFormElement>
+                <Property name="name">classcode1</Property>
+                <Property name="property">classcode1</Property>
+                <Property name="readOnly">true</Property>
+                <Editor/>
+              </AutoFormElement>
+              <AutoFormElement>
+                <Property name="name">classname1</Property>
+                <Property name="property">classname1</Property>
+                <Editor/>
+              </AutoFormElement>
+              <AutoFormElement layoutConstraint="colSpan:2;rowSpan:3">
+                <Property name="name">memo</Property>
+                <Property name="property">memo</Property>
+                <Editor>
+                  <TextArea layoutConstraint="colSpan:2;rowSpan:3"/>
+                </Editor>
+              </AutoFormElement>
+            </AutoForm>
+          </Children>
+        </GroupBox>
+        <GroupBox>
+          <Property name="caption">维护管理</Property>
+          <Buttons/>
+          <Children>
+            <AutoForm>
+              <Property name="dataSet">DS_ZY_CLASS</Property>
+              <Property name="dataType">ZY_CLASS1</Property>
+              <Property name="cols">*,*</Property>
+              <Property name="readOnly">true</Property>
+              <AutoFormElement>
+                <Property name="name">create_user</Property>
+                <Property name="property">create_user</Property>
+                <Editor/>
+              </AutoFormElement>
+              <AutoFormElement>
+                <Property name="name">create_date</Property>
+                <Property name="property">create_date</Property>
+                <Editor/>
+              </AutoFormElement>
+              <AutoFormElement>
+                <Property name="name">last_update_user</Property>
+                <Property name="property">last_update_user</Property>
+                <Editor/>
+              </AutoFormElement>
+              <AutoFormElement>
+                <Property name="name">last_update_date</Property>
+                <Property name="property">last_update_date</Property>
+                <Editor/>
+              </AutoFormElement>
+            </AutoForm>
+          </Children>
+        </GroupBox>
+      </Children>
+      <Tools/>
+    </Dialog>
+    <UpdateAction id="updateActionSave">
+      <ClientEvent name="onSuccess">this.get(&quot;#DLG_FORM&quot;).close();&#xD;
+self.set(&quot;userData&quot;,&quot;&quot;);&#xD;
+//this.get(&quot;#DS_ZY_CLASS&quot;).flushAsync();&#xD;
+</ClientEvent>
+      <ClientEvent name="beforeExecute">var type = self.get(&quot;userData&quot;);&#xD;
+if (type == &quot;insert&quot;) {&#xD;
+	//数据保存前，再获取次编码，以防止并发操作，编码重码&#xD;
+	var getcode =view.get(&quot;#ajaxGetCode&quot;);&#xD;
+	getcode.execute();&#xD;
+	var max_code=getcode.get(&quot;returnValue&quot;);&#xD;
+	var codenew=&quot;H&quot;+max_code+&quot;&quot;;&#xD;
+	//code ：第一次获取的编码&#xD;
+	if(codenew!=code)&#xD;
+	{&#xD;
+		this.set(&quot;#DS_ZY_CLASS.data:#.classcode1&quot;,codenew);&#xD;
+	}&#xD;
+}</ClientEvent>
+      <Property name="dataResolver">zyClass1PR#saveZyClass</Property>
+      <Property name="successMessage">保存成功</Property>
+      <UpdateItem>
+        <Property name="dataSet">DS_ZY_CLASS</Property>
+        <Property name="dataPath">[#dirty]</Property>
+        <Property name="submitOldData">true</Property>
+      </UpdateItem>
+    </UpdateAction>
+    <Action id="ACT_LOAD">
+      <ClientEvent name="beforeExecute">if (this.pageSize!=null&amp;&amp;this.pageSize!=&quot;&quot;){&#xD;
+	this.id(&quot;DS_ZY_CLASS&quot;).set(&quot;pageSize&quot;,this.pageSize);	&#xD;
+}</ClientEvent>
+      <ClientEvent name="onExecute">this.get(&quot;#DS_ZY_CLASS&quot;).set(&quot;parameter&quot;, {&#xD;
+        condition:this.get(&quot;#DS_CONDITION&quot;).getData(&quot;#&quot;)&#xD;
+    });&#xD;
+this.get(&quot;#DS_CONDITION&quot;).setData({}); &#xD;
+this.get(&quot;#DS_ZY_CLASS&quot;).flushAsync();&#xD;
+&#xD;
+</ClientEvent>
+    </Action>
+    <AjaxAction id="ajaxGetCode">
+      <Property name="service">zyClass1PR#generate_code</Property>
+      <Property name="async">false</Property>
+    </AjaxAction>
+  </View>
+</ViewConfig>

@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewConfig>
+  <Arguments/>
+  <Context/>
+  <Model>
+    <DataType name="ZY_QINGJIADAN_1" parent="ZY_QingJiaDan">
+      <PropertyDef name="qjbegindate">
+        <Property name="dataType">Date</Property>
+        <Property name="label">开始时间</Property>
+        <Property name="displayFormat">Y-m-d H:i</Property>
+      </PropertyDef>
+      <PropertyDef name="qjenddate">
+        <Property name="dataType">Date</Property>
+        <Property name="label">结束时间</Property>
+        <Property name="displayFormat">Y-m-d H:i</Property>
+        <Validator type="custom">
+          <ClientEvent name="onValidate">var startDate = arg.entity.get(&quot;qjbegindate&quot;);&#xD;
+&#xD;
+if(Date.parse(new Date(startDate))>Date.parse(new Date(arg.data))) &#xD;
+{&#xD;
+	throw new dorado.Exception(&quot;开始时间晚于结束时间，请重新输入&quot;);&#xD;
+}&#xD;
+</ClientEvent>
+        </Validator>
+      </PropertyDef>
+    </DataType>
+  </Model>
+  <View>
+    <DataSet id="DS_QINGJIADAN_1">
+      <Property name="dataType">ZY_QINGJIADAN_1</Property>
+      <Property name="dataProvider">zyQingJiaDanPR#loadZYQingJiaDan</Property>
+      <Property name="parameter">
+        <Entity>
+          <Property name="businessid">${request.getParameter(&quot;businessId&quot;)}</Property>
+        </Entity>
+      </Property>
+    </DataSet>
+    <Container>
+      <GroupBox>
+        <Property name="caption">申请信息</Property>
+        <Buttons/>
+        <Children>
+          <AutoForm>
+            <Property name="dataSet">DS_QINGJIADAN_1</Property>
+            <Property name="cols">*,*</Property>
+            <AutoFormElement>
+              <Property name="name">qjmakeuser</Property>
+              <Property name="property">qjmakeuser</Property>
+              <Editor/>
+            </AutoFormElement>
+            <AutoFormElement>
+              <Property name="name">qjmakedate</Property>
+              <Property name="property">qjmakedate</Property>
+              <Editor/>
+            </AutoFormElement>
+            <AutoFormElement>
+              <Property name="name">qjdept</Property>
+              <Property name="property">qjdept</Property>
+              <Editor/>
+            </AutoFormElement>
+            <AutoFormElement>
+              <Property name="name">qjposition</Property>
+              <Property name="property">qjposition</Property>
+              <Editor/>
+            </AutoFormElement>
+            <AutoFormElement>
+              <Property name="name">qjbegindate</Property>
+              <Property name="property">qjbegindate</Property>
+              <Property name="trigger">defaultDateTimeDropDown</Property>
+              <Editor/>
+            </AutoFormElement>
+            <AutoFormElement>
+              <Property name="name">qjenddate</Property>
+              <Property name="property">qjenddate</Property>
+              <Property name="trigger">defaultDateTimeDropDown</Property>
+              <Editor/>
+            </AutoFormElement>
+            <AutoFormElement layoutConstraint="colSpan:2">
+              <Property name="name">qjtype</Property>
+              <Property name="property">qjtype</Property>
+              <Editor>
+                <RadioGroup>
+                  <RadioButton>
+                    <Property name="value">shj</Property>
+                    <Property name="text">事假</Property>
+                  </RadioButton>
+                  <RadioButton>
+                    <Property name="value">bj</Property>
+                    <Property name="text">病假</Property>
+                  </RadioButton>
+                  <RadioButton>
+                    <Property name="text">婚假</Property>
+                    <Property name="value">hj</Property>
+                  </RadioButton>
+                  <RadioButton>
+                    <Property name="value">cj</Property>
+                    <Property name="text">产假</Property>
+                  </RadioButton>
+                  <RadioButton>
+                    <Property name="text">陪侍假</Property>
+                    <Property name="value">psj</Property>
+                  </RadioButton>
+                  <RadioButton>
+                    <Property name="value">sj</Property>
+                    <Property name="text">丧假</Property>
+                  </RadioButton>
+                  <RadioButton>
+                    <Property name="value">gsj</Property>
+                    <Property name="text">工伤假</Property>
+                  </RadioButton>
+                  <RadioButton>
+                    <Property name="text">特别假</Property>
+                    <Property name="value">tbj</Property>
+                  </RadioButton>
+                </RadioGroup>
+              </Editor>
+            </AutoFormElement>
+            <AutoFormElement layoutConstraint="colSpan:2">
+              <Property name="name">qjcontent</Property>
+              <Property name="property">qjcontent</Property>
+              <Property name="editorType">RadioGroup</Property>
+              <Editor>
+                <TextArea/>
+              </Editor>
+            </AutoFormElement>
+            <AutoFormElement layoutConstraint="colSpan:2">
+              <Property name="name">qjmemo</Property>
+              <Property name="property">qjmemo</Property>
+              <Editor>
+                <TextArea/>
+              </Editor>
+            </AutoFormElement>
+          </AutoForm>
+        </Children>
+      </GroupBox>
+      <GroupBox>
+        <Property name="caption">部门审批意见</Property>
+        <Buttons/>
+        <Children>
+          <AutoForm>
+            <Property name="dataSet">DS_QINGJIADAN_1</Property>
+            <Property name="cols">*,*</Property>
+            <AutoFormElement layoutConstraint="padding:1">
+              <Property name="name">qjdeptmanager</Property>
+              <Property name="property">qjdeptmanager</Property>
+              <Property name="width">250</Property>
+              <Property name="labelWidth">84</Property>
+              <Editor/>
+            </AutoFormElement>
+            <AutoFormElement>
+              <Property name="name">qjdeptstate</Property>
+              <Property name="property">qjdeptstate</Property>
+              <Property name="labelWidth">84</Property>
+              <Editor/>
+            </AutoFormElement>
+            <AutoFormElement layoutConstraint="colSpan:2">
+              <Property name="name">qjdeptapproval</Property>
+              <Property name="property">qjdeptapproval</Property>
+              <Property name="labelPosition">left</Property>
+              <Property name="labelWidth">84</Property>
+              <Editor>
+                <TextArea/>
+              </Editor>
+            </AutoFormElement>
+          </AutoForm>
+        </Children>
+      </GroupBox>
+      <GroupBox>
+        <Property name="caption">行政内勤审批意见</Property>
+        <Buttons/>
+        <Children>
+          <AutoForm>
+            <Property name="dataSet">DS_QINGJIADAN_1</Property>
+            <Property name="cols">*,*</Property>
+            <AutoFormElement>
+              <Property name="name">qjhrmanager</Property>
+              <Property name="property">qjhrmanager</Property>
+              <Property name="width">250</Property>
+              <Property name="labelWidth">84</Property>
+              <Editor/>
+            </AutoFormElement>
+            <AutoFormElement>
+              <Property name="name">qjhrstate</Property>
+              <Property name="property">qjhrstate</Property>
+              <Property name="labelWidth">84</Property>
+              <Editor/>
+            </AutoFormElement>
+            <AutoFormElement layoutConstraint="colSpan:2">
+              <Property name="name">qjhrapproval</Property>
+              <Property name="property">qjhrapproval</Property>
+              <Property name="labelWidth">84</Property>
+              <Editor>
+                <TextArea/>
+              </Editor>
+            </AutoFormElement>
+          </AutoForm>
+        </Children>
+      </GroupBox>
+      <GroupBox>
+        <Property name="caption">流程状态</Property>
+        <Buttons/>
+        <Children>
+          <AutoForm>
+            <Property name="dataSet">DS_QINGJIADAN_1</Property>
+            <Property name="cols">*,*</Property>
+            <AutoFormElement>
+              <Property name="name">qjcanceldate</Property>
+              <Property name="property">qjcanceldate</Property>
+              <Property name="labelWidth">84</Property>
+              <Property name="width">250</Property>
+              <Editor/>
+            </AutoFormElement>
+            <AutoFormElement>
+              <Property name="name">qjworkflowstate</Property>
+              <Property name="property">qjworkflowstate</Property>
+              <Editor/>
+            </AutoFormElement>
+          </AutoForm>
+        </Children>
+      </GroupBox>
+    </Container>
+    <UpdateAction id="updateAction_submit">
+      <Property name="dataResolver">zyQingJiaDanPR#SubmitQingJiaDan</Property>
+      <Property name="successMessage">提交成功</Property>
+      <UpdateItem>
+        <Property name="dataPath">!DIRTY_TREE</Property>
+        <Property name="dataSet">DS_QINGJIADAN_1</Property>
+      </UpdateItem>
+    </UpdateAction>
+  </View>
+</ViewConfig>

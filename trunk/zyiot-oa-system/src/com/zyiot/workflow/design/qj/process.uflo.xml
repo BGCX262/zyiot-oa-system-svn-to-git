@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uflo-process name="请假流程" key="QingJiaDan">
+  <start g="7,8,68,60" name="填写请假单">
+    <sequence-flow to="部门经理审批"/>
+  </start>
+  <task g="169,156,134,55" allow-specify-assignee="false" task-type="Normal" url="com.zyiot.workflow.view.qj.ZYQingJiaDanApproveCEO.d" assignment-type="ProcessPromoter" name="董事长审批">
+    <sequence-flow to="行政内勤确认"/>
+  </task>
+  <decision expression="${dayCount&gt;3?&quot;大于3天&quot;:&quot;小于等于3天&quot;}" g="379,10,95,60" name="判断请假天数" decision-type="Expression">
+    <sequence-flow to="董事长审批" g="-40,-9" name="大于3天"/>
+    <sequence-flow to="行政内勤确认" g="-40,-9" name="小于等于3天"/>
+  </decision>
+  <task g="497,155,148,55" allow-specify-assignee="false" task-type="Normal" url="com.zyiot.workflow.view.qj.ZYQingJiaDanApproveHR.d" assignment-type="ProcessPromoter" name="行政内勤确认">
+      <sequence-flow to="休假开始"/>
+  </task>
+  <end g="23,333,84,60" terminate="true" name="请假结束"/>
+  <task g="168,12,120,55" allow-specify-assignee="false" task-type="Normal" assignment-handler-bean="qj.DeptManagerAssignmentHandler" url="com.zyiot.workflow.view.qj.ZYQingJiaDanApproveDept.d" assignment-type="Handler" name="部门经理审批">
+    <sequence-flow to="判断请假天数" g="-5,-17" name="批准"/>
+  </task>
+   <task g="502,338,132,50" allow-specify-assignee="false" task-type="Normal" url="com.zyiot.workflow.view.qj.ZYQingJiaDanApproveHRcancel.d" assignment-type="ProcessPromoter" name="行政内勤销假">
+      <sequence-flow to="销假完成"/>
+   </task>
+   <action g="192,339,115,50" handler-bean="qj.FinshActionHandler" name="销假完成">
+    <sequence-flow to="请假结束"/>
+   </action>
+   <action g="513,251,115,50" handler-bean="qj.CompleteActionHandler" name="休假开始">
+      <sequence-flow to="行政内勤销假"/>
+   </action>
+</uflo-process>

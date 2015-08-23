@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Model>
+  <DataType name="ZY_QingJiaDan">
+    <Property name="creationType">com.zyiot.workflow.entity.ZYQingJiaDan</Property>
+    <PropertyDef name="pkid">
+      <Property name="dataType">String</Property>
+    </PropertyDef>
+    <PropertyDef name="qjmakeuser">
+      <Property name="dataType">String</Property>
+      <Property name="label">请假人</Property>
+      <Property name="mapping">
+        <Property name="mapValues">${dorado.getDataProvider(&quot;dropDownManage#loadUserByUsername&quot;).getResult(&quot;admin&quot;)}</Property>
+        <Property name="keyProperty">username</Property>
+        <Property name="valueProperty">cname</Property>
+      </Property>
+      <Property name="readOnly">true</Property>
+      <Property name="required">true</Property>
+    </PropertyDef>
+    <PropertyDef name="qjmakedate">
+      <Property name="dataType">Date</Property>
+      <Property name="label">创建时间</Property>
+      <Property name="readOnly">true</Property>
+      <Property name="displayFormat">Y-m-d H:i</Property>
+      <Property name="required">true</Property>
+    </PropertyDef>
+    <PropertyDef name="qjdept">
+      <Property name="dataType">String</Property>
+      <Property name="label">部门</Property>
+      <Property name="mapping">
+        <Property name="mapValues">${dorado.getDataProvider(&quot;dropDownManage#loadDeptById&quot;).getResult(&quot;TECHCENTER&quot;)}</Property>
+        <Property name="keyProperty">id</Property>
+        <Property name="valueProperty">name</Property>
+      </Property>
+      <Property name="readOnly">true</Property>
+      <Property name="required">true</Property>
+    </PropertyDef>
+    <PropertyDef name="qjposition">
+      <Property name="dataType">String</Property>
+      <Property name="label">职位</Property>
+      <Property name="mapping">
+        <Property name="mapValues">${dorado.getDataProvider(&quot;dropDownManage#loadPositionById&quot;).getResult($${this.qjposition)}</Property>
+        <Property name="keyProperty">id</Property>
+        <Property name="valueProperty">name</Property>
+      </Property>
+      <Property name="readOnly">true</Property>
+      <Property name="required">true</Property>
+    </PropertyDef>
+    <PropertyDef name="qjbegindate">
+      <Property name="dataType">Date</Property>
+      <Property name="label">开始时间</Property>
+      <Property name="displayFormat">Y-m-d H:i</Property>
+      <Property name="required">true</Property>
+    </PropertyDef>
+    <PropertyDef name="qjenddate">
+      <Property name="dataType">Date</Property>
+      <Property name="label">结束时间</Property>
+      <Property name="displayFormat">Y-m-d H:i</Property>
+      <Property name="required">true</Property>
+    </PropertyDef>
+    <PropertyDef name="qjhours">
+      <Property name="dataType">int</Property>
+      <Property name="label">共计时间</Property>
+      <Property name="displayFormat">#0.0h</Property>
+    </PropertyDef>
+    <PropertyDef name="qjtype">
+      <Property name="dataType">String</Property>
+      <Property name="label">请假类型</Property>
+      <Property name="required">true</Property>
+      <Property name="mapping">
+        <Property name="mapValues">${dorado.getDataProvider(&quot;dropDownManage#getCodes&quot;).getResult(&quot;qjtype&quot;)}</Property>
+        <Property name="keyProperty">CODE_ID</Property>
+        <Property name="valueProperty">CODE_NAME</Property>
+      </Property>
+    </PropertyDef>
+    <PropertyDef name="qjcontent">
+      <Property name="dataType">String</Property>
+      <Property name="label">请假事由</Property>
+      <Property name="required">true</Property>
+    </PropertyDef>
+    <PropertyDef name="qjmemo">
+      <Property name="dataType">String</Property>
+      <Property name="label">备注</Property>
+    </PropertyDef>
+    <PropertyDef name="qjdeptmanager">
+      <Property name="dataType">String</Property>
+      <Property name="label">部门负责人</Property>
+    </PropertyDef>
+    <PropertyDef name="qjdeptstate">
+      <Property name="dataType">String</Property>
+      <Property name="label">部门意见状态</Property>
+      <Property name="mapping">
+        <Property name="mapValues">${dorado.getDataProvider(&quot;dropDownManage#getCodes&quot;).getResult(&quot;qjdeptstate&quot;)}</Property>
+        <Property name="keyProperty">CODE_ID</Property>
+        <Property name="valueProperty">CODE_NAME</Property>
+      </Property>
+    </PropertyDef>
+    <PropertyDef name="qjdeptapproval">
+      <Property name="dataType">String</Property>
+      <Property name="label">部门审批意见</Property>
+    </PropertyDef>
+    <PropertyDef name="qjhrmanager">
+      <Property name="dataType">String</Property>
+      <Property name="label">行政负责人</Property>
+    </PropertyDef>
+    <PropertyDef name="qjhrstate">
+      <Property name="dataType">String</Property>
+      <Property name="label">行政意见状态</Property>
+      <Property name="mapping">
+        <Property name="mapValues">${dorado.getDataProvider(&quot;dropDownManage#getCodes&quot;).getResult(&quot;qjdeptstate&quot;)}</Property>
+        <Property name="keyProperty">CODE_ID</Property>
+        <Property name="valueProperty">CODE_NAME</Property>
+      </Property>
+    </PropertyDef>
+    <PropertyDef name="qjhrapproval">
+      <Property name="dataType">String</Property>
+      <Property name="label">行政审批意见</Property>
+    </PropertyDef>
+    <PropertyDef name="qjcanceldate">
+      <Property name="dataType">Date</Property>
+      <Property name="label">销假时间</Property>
+    </PropertyDef>
+    <PropertyDef name="qjworkflowstate">
+      <Property name="dataType">String</Property>
+      <Property name="mapping">
+        <Property name="mapValues">${dorado.getDataProvider(&quot;dropDownManage#getCodes&quot;).getResult(&quot;qjworkflowstate&quot;)}</Property>
+        <Property name="keyProperty">CODE_ID</Property>
+        <Property name="valueProperty">CODE_NAME</Property>
+      </Property>
+      <Property name="label">流程状态</Property>
+    </PropertyDef>
+  </DataType>
+</Model>

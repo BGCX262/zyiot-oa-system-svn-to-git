@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewConfig>
+  <Arguments/>
+  <Context/>
+  <Model>
+    <DataType name="ZY_QINGJIADAN" parent="ZY_QingJiaDan">
+      <PropertyDef name="qjbegindate">
+        <Property name="dataType">Date</Property>
+        <Property name="label">开始时间</Property>
+        <Property name="displayFormat">Y-m-d H:i</Property>
+      </PropertyDef>
+      <PropertyDef name="qjenddate">
+        <Property name="dataType">Date</Property>
+        <Property name="label">结束时间</Property>
+        <Property name="displayFormat">Y-m-d H:i</Property>
+        <Validator type="custom">
+          <ClientEvent name="onValidate">var startDate = arg.entity.get(&quot;qjbegindate&quot;);&#xD;
+&#xD;
+if(Date.parse(new Date(startDate))>Date.parse(new Date(arg.data))) &#xD;
+{&#xD;
+	throw new dorado.Exception(&quot;开始时间晚于结束时间，请重新输入&quot;);&#xD;
+}&#xD;
+</ClientEvent>
+        </Validator>
+      </PropertyDef>
+    </DataType>
+  </Model>
+  <View>
+    <DataSet id="DS_QINGJIADAN">
+      <Property name="dataType">[ZY_QINGJIADAN]</Property>
+      <Property name="dataProvider">zyQingJiaDanPR#getAll</Property>
+      <Property name="pageSize">30</Property>
+    </DataSet>
+    <ToolBar>
+      <DataPilot>
+        <Property name="dataSet">DS_QINGJIADAN</Property>
+      </DataPilot>
+      <ToolBarButton>
+        <ClientEvent name="onClick">var iframe = view.get(&quot;#QJ_FORM&quot;);&#xD;
+iframe.set(&quot;path&quot;,&quot;com.zyiot.workflow.view.qj.ZYQingJiaDanForm.d&quot;);&#xD;
+&#xD;
+this.get(&quot;#DLG_FORM&quot;).show();&#xD;
+&#xD;
+</ClientEvent>
+        <Property name="caption">提交请假单</Property>
+      </ToolBarButton>
+    </ToolBar>
+    <DataGrid>
+      <Property name="dataSet">DS_QINGJIADAN</Property>
+      <Property name="readOnly">true</Property>
+      <Property name="fixedColumnCount">5</Property>
+      <RowNumColumn/>
+      <DataColumn name="qjmakeuser">
+        <Property name="property">qjmakeuser</Property>
+      </DataColumn>
+      <DataColumn name="qjmakedate">
+        <Property name="property">qjmakedate</Property>
+      </DataColumn>
+      <DataColumn name="qjdept">
+        <Property name="property">qjdept</Property>
+      </DataColumn>
+      <DataColumn name="qjposition">
+        <Property name="property">qjposition</Property>
+      </DataColumn>
+      <DataColumn name="qjstartdate">
+        <Property name="property">qjbegindate</Property>
+      </DataColumn>
+      <DataColumn name="qjenddate">
+        <Property name="property">qjenddate</Property>
+      </DataColumn>
+      <DataColumn name="qjhours">
+        <Property name="property">qjhours</Property>
+      </DataColumn>
+      <DataColumn name="qjtype">
+        <Property name="property">qjtype</Property>
+      </DataColumn>
+      <DataColumn name="qjcontent">
+        <Property name="property">qjcontent</Property>
+      </DataColumn>
+      <DataColumn name="qjmemo">
+        <Property name="property">qjmemo</Property>
+      </DataColumn>
+      <DataColumn name="qjdeptmanager">
+        <Property name="property">qjdeptmanager</Property>
+      </DataColumn>
+      <DataColumn name="qjdeptstate">
+        <Property name="property">qjdeptstate</Property>
+      </DataColumn>
+      <DataColumn name="qjdeptapproval">
+        <Property name="property">qjdeptapproval</Property>
+      </DataColumn>
+      <DataColumn name="qjhrmanager">
+        <Property name="property">qjhrmanager</Property>
+      </DataColumn>
+      <DataColumn name="qjhrstate">
+        <Property name="property">qjhrstate</Property>
+      </DataColumn>
+      <DataColumn name="qjhrapproval">
+        <Property name="property">qjhrapproval</Property>
+      </DataColumn>
+      <DataColumn name="qjcanceldate">
+        <Property name="property">qjcanceldate</Property>
+      </DataColumn>
+      <DataColumn name="qjworkflowstate">
+        <Property name="property">qjworkflowstate</Property>
+      </DataColumn>
+    </DataGrid>
+    <UpdateAction id="updateAction_submit">
+      <Property name="dataResolver">zyQingJiaDanPR#submitQingJiaDan</Property>
+      <Property name="successMessage">提交成功</Property>
+      <UpdateItem>
+        <Property name="dataPath">[#dirty]</Property>
+        <Property name="dataSet">DS_QINGJIADAN</Property>
+      </UpdateItem>
+    </UpdateAction>
+    <ListDropDown id="lst_qj_type">
+      <Property name="items">
+        <Collection>
+          <Value>事假</Value>
+          <Value>病假</Value>
+          <Value>婚假</Value>
+          <Value>产假</Value>
+          <Value>陪侍假</Value>
+        </Collection>
+      </Property>
+    </ListDropDown>
+    <Dialog id="DLG_FORM">
+      <Property name="width">600</Property>
+      <Property name="height">650</Property>
+      <Property name="resizeable">false</Property>
+      <Property name="caption">请假申请单</Property>
+      <Buttons>
+        <Button id="btn_submit">
+          <ClientEvent name="onClick">var iframe = view.get(&quot;#QJ_FORM&quot;).getIFrameWindow();&#xD;
+var submit = iframe.$id(&quot;updateAction_submit&quot;).objects[0];&#xD;
+var DLG_FORM=this.get(&quot;#DLG_FORM&quot;);&#xD;
+submit.execute(function(){&#xD;
+	DLG_FORM.close();&#xD;
+});&#xD;
+this.get(&quot;#DS_QINGJIADAN&quot;).flushAsync();&#xD;
+//this.get(&quot;#DLG_FORM&quot;).close();</ClientEvent>
+          <Property name="caption">提交</Property>
+          <Property name="action">updateAction_submit</Property>
+        </Button>
+        <Button id="btn_cancel">
+          <ClientEvent name="onClick">this.get(&quot;#DLG_FORM&quot;).close();&#xD;
+</ClientEvent>
+          <Property name="caption">取消</Property>
+        </Button>
+      </Buttons>
+      <Children>
+        <IFrame id="QJ_FORM"/>
+      </Children>
+      <Tools/>
+    </Dialog>
+  </View>
+</ViewConfig>
